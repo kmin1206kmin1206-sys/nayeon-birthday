@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff4f7">
+  <title>오늘은 네가 주인공! 🎂</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #573d50;
+      --pink: #f394b5;
+      --berry: #bd638d;
+      --cream: #fffaf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 12% 18%, #ffe1eb 0, transparent 30%),
+        radial-gradient(ellipse at 89% 80%, #f6e5ff 0, transparent 32%),
+        #fff8f8;
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 48px 24px;
+      isolation: isolate;
+    }
+
+    .page::before,
+    .page::after {
+      position: fixed;
+      z-index: -1;
+      color: #efb4c8;
+      font-size: 30px;
+      opacity: .65;
+      content: "✦";
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+
+    .page::before { top: 13%; left: 9%; }
+    .page::after { right: 10%; bottom: 15%; animation-delay: 1.2s; }
+
+    .card {
+      width: min(100%, 920px);
+      overflow: hidden;
+      border: 1px solid #fff;
+      border-radius: 32px;
+      background: rgb(255 255 255 / 78%);
+      box-shadow: 0 24px 80px rgb(145 91 119 / 13%);
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .top {
+      padding: 52px 24px 8px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 14px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #a25377;
+      background: #fff0f5;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    h1 {
+      margin: 0;
+      color: #603e55;
+      font-size: clamp(32px, 6vw, 56px);
+      letter-spacing: -.06em;
+      line-height: 1.2;
+    }
+
+    h1 span { color: #df779e; }
+
+    .subtitle {
+      margin: 15px 0 0;
+      color: #927b8b;
+      font-size: clamp(15px, 2.5vw, 18px);
+      line-height: 1.7;
+    }
+
+    .cake-stage {
+      position: relative;
+      display: grid;
+      min-height: 320px;
+      place-items: end center;
+      padding: 0 16px 25px;
+    }
+
+    .cake {
+      position: relative;
+      width: min(76vw, 370px);
+      height: 245px;
+      animation: cake-in .8s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .candles {
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 50%;
+      display: flex;
+      gap: 29px;
+      transform: translateX(-50%);
+    }
+
+    .candle {
+      position: relative;
+      width: 15px;
+      height: 66px;
+      border: 1px solid rgb(255 255 255 / 75%);
+      border-radius: 5px 5px 2px 2px;
+      background: repeating-linear-gradient(135deg, #fff 0 7px, #f398b8 7px 13px);
+      box-shadow: 0 3px 7px rgb(126 73 97 / 12%);
+    }
+
+    .flame {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      width: 13px;
+      height: 20px;
+      border-radius: 50% 50% 50% 0;
+      background: linear-gradient(145deg, #fff6a6 5%, #ffc04e 65%, #ff8c56);
+      box-shadow: 0 0 16px #ffc55b, 0 0 30px rgb(255 190 78 / 55%);
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: 50% 80%;
+      animation: flicker .8s ease-in-out infinite alternate;
+      transition: opacity .25s, transform .25s;
+    }
+
+    .blown .flame {
+      opacity: 0;
+      transform: translate(-50%, 10px) rotate(-45deg) scale(.3);
+    }
+
+    .icing {
+      position: absolute;
+      z-index: 3;
+      top: 66px;
+      left: 50%;
+      width: 88%;
+      height: 55px;
+      border-radius: 50% 50% 13px 13px / 56% 56% 15px 15px;
+      background: linear-gradient(#fff9f4, #ffe8ee);
+      box-shadow: inset 0 -7px 0 rgb(235 151 177 / 22%);
+      transform: translateX(-50%);
+    }
+
+    .icing::after {
+      position: absolute;
+      right: 0;
+      bottom: -9px;
+      left: 0;
+      height: 20px;
+      background: radial-gradient(12px 12px at 12px 0, transparent 11px, #ffeaf0 12px) 0 0 / 25px 20px repeat-x;
+      content: "";
+    }
+
+    .cake-top {
+      position: absolute;
+      z-index: 2;
+      top: 83px;
+      left: 50%;
+      width: 86%;
+      height: 30px;
+      border-radius: 50%;
+      background: #fffaf4;
+      transform: translateX(-50%);
+    }
+
+    .layer {
+      position: absolute;
+      left: 50%;
+      width: 82%;
+      height: 84px;
+      border-radius: 0 0 22px 22px;
+      background: linear-gradient(90deg, #df8cad, #f5b5c5 45%, #e994ae);
+      box-shadow: inset 0 -12px 0 rgb(173 86 119 / 12%), 0 8px 16px rgb(144 73 102 / 13%);
+      transform: translateX(-50%);
+    }
+
+    .layer-one { top: 106px; }
+
+    .layer-one::before {
+      position: absolute;
+      top: 26px;
+      right: 0;
+      left: 0;
+      height: 10px;
+      background: #fff2eb;
+      box-shadow: 0 4px 0 rgb(199 116 144 / 15%);
+      content: "";
+    }
+
+    .layer-two {
+      top: 165px;
+      width: 72%;
+      height: 66px;
+      border-radius: 0 0 30px 30px;
+      background: linear-gradient(90deg, #e9a978, #f8d09a 45%, #e9a978);
+    }
+
+    .layer-two::before {
+      position: absolute;
+      top: 17px;
+      right: 0;
+      left: 0;
+      height: 8px;
+      background: #fff1e0;
+      content: "";
+    }
+
+    .berry {
+      position: absolute;
+      z-index: 5;
+      top: 77px;
+      left: 50%;
+      width: 24px;
+      height: 21px;
+      border-radius: 60% 60% 55% 55%;
+      background: linear-gradient(140deg, #ef8798, #c95371);
+      box-shadow: inset -3px -3px 0 rgb(138 45 69 / 14%);
+      transform: translateX(-50%);
+    }
+
+    .berry::before {
+      position: absolute;
+      top: -5px;
+      left: 9px;
+      width: 7px;
+      height: 8px;
+      border-radius: 0 90% 0 90%;
+      background: #8eb67f;
+      content: "";
+      transform: rotate(-24deg);
+    }
+
+    .sprinkle {
+      position: absolute;
+      z-index: 4;
+      width: 8px;
+      height: 3px;
+      border-radius: 9px;
+      background: #fff3a8;
+      transform: rotate(35deg);
+    }
+
+    .s1 { top: 133px; left: 22%; }
+    .s2 { top: 148px; left: 35%; background: #a6d9cd; transform: rotate(-30deg); }
+    .s3 { top: 130px; right: 28%; background: #fff; transform: rotate(-15deg); }
+    .s4 { top: 148px; right: 17%; background: #fff3a8; transform: rotate(55deg); }
+    .s5 { top: 186px; left: 30%; background: #fff; }
+    .s6 { top: 197px; right: 29%; background: #a6d9cd; transform: rotate(-35deg); }
+
+    .plate {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: 50%;
+      width: 100%;
+      height: 23px;
+      border-radius: 50%;
+      background: linear-gradient(#fff, #f2e4eb);
+      box-shadow: 0 8px 14px rgb(108 67 90 / 15%);
+      transform: translateX(-50%);
+    }
+
+    .message {
+      margin: 0 24px 28px;
+      padding: 28px clamp(20px, 6vw, 52px);
+      border: 1px solid #fae7ed;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff9f5, #fff5f9);
+      text-align: left;
+    }
+
+    .message h2 {
+      margin: 0 0 12px;
+      color: #b45d81;
+      font-size: 17px;
+    }
+
+    .message p {
+      margin: 0;
+      color: #725d6d;
+      font-size: 15px;
+      line-height: 1.95;
+      word-break: keep-all;
+    }
+
+    .signoff {
+      margin-top: 15px !important;
+      color: #b45d81 !important;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .reveal-letter {
+      position: relative;
+      display: grid;
+      width: 230px;
+      height: 145px;
+      place-items: end center;
+      margin: 0 auto 28px;
+      overflow: hidden;
+      padding: 0 12px 15px;
+      border: 1px solid #e8a9bd;
+      border-radius: 12px;
+      color: #a44f73;
+      background: linear-gradient(145deg, transparent 49%, #f5c5d3 50%) bottom left / 50% 75% no-repeat,
+        linear-gradient(215deg, transparent 49%, #f5c5d3 50%) bottom right / 50% 75% no-repeat,
+        #fff4f5;
+      box-shadow: 0 10px 24px rgb(196 103 145 / 18%);
+      font-size: 15px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .reveal-letter[hidden] {
+      display: none;
+    }
+
+    .reveal-letter::before {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 105px;
+      background: linear-gradient(145deg, #f8d7e1, #edacc1);
+      clip-path: polygon(0 0, 100% 0, 50% 82%);
+      content: "";
+    }
+
+    .reveal-letter::after {
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      border-radius: 50%;
+      color: #cf668d;
+      background: #fff8f4;
+      box-shadow: 0 2px 6px rgb(130 63 89 / 14%);
+      content: "♥";
+      font-size: 15px;
+      transform: translateX(-50%);
+    }
+
+    .reveal-letter:hover {
+      box-shadow: 0 13px 28px rgb(196 103 145 / 25%);
+      transform: translateY(-3px);
+    }
+
+    .reveal-letter:focus-visible {
+      outline: 3px solid #a34a73;
+      outline-offset: 4px;
+    }
+
+    .celebrate {
+      margin: 0 0 36px;
+      padding: 14px 23px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(100deg, #e782a6, #c86e9c);
+      box-shadow: 0 8px 18px rgb(196 103 145 / 25%);
+      cursor: pointer;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .celebrate:hover {
+      box-shadow: 0 11px 22px rgb(196 103 145 / 32%);
+      transform: translateY(-2px);
+    }
+
+    .celebrate:focus-visible {
+      outline: 3px solid #a34a73;
+      outline-offset: 4px;
+    }
+
+    .confetti {
+      position: fixed;
+      z-index: 10;
+      top: -14px;
+      width: 9px;
+      height: 14px;
+      pointer-events: none;
+      animation: fall 2.8s linear forwards;
+    }
+
+    .footer {
+      margin: -17px 0 24px;
+      color: #b9a7b3;
+      font-size: 12px;
+    }
+
+    @keyframes flicker {
+      from { filter: brightness(1); transform: translateX(-50%) rotate(-48deg) scale(.96); }
+      to { filter: brightness(1.16); transform: translateX(-50%) rotate(-40deg) scale(1.06); }
+    }
+
+    @keyframes twinkle {
+      from { opacity: .3; transform: scale(.8) rotate(0); }
+      to { opacity: .9; transform: scale(1.2) rotate(25deg); }
+    }
+
+    @keyframes cake-in {
+      from { opacity: 0; transform: translateY(18px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fall {
+      to { transform: translate3d(var(--drift), 110vh, 0) rotate(720deg); opacity: .8; }
+    }
+
+    @media (max-width: 520px) {
+      .page { padding: 22px 14px; }
+      .card { border-radius: 25px; }
+      .top { padding-top: 38px; }
+      .cake-stage { min-height: 288px; }
+      .cake { transform: scale(.88); transform-origin: bottom center; }
+      .message { margin-right: 16px; margin-left: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <article class="card">
+      <header class="top">
+        <p class="eyebrow">오늘은 아주 특별한 날 ✨</p>
+        <h1>생일 축하해, <span>나연아!</span></h1>
+        <p class="subtitle">오늘 하루 세상에서 제일 많이 웃고, 제일 많이 행복하길!</p>
+      </header>
+
+      <section class="cake-stage" aria-label="초 세 개가 꽂힌 생일 케이크">
+        <div class="cake" id="cake">
+          <div class="candles" aria-hidden="true">
+            <span class="candle"><i class="flame"></i></span>
+            <span class="candle"><i class="flame"></i></span>
+            <span class="candle"><i class="flame"></i></span>
+          </div>
+          <div class="cake-top"></div>
+          <div class="icing"></div>
+          <div class="berry"></div>
+          <div class="layer layer-one"></div>
+          <div class="layer layer-two"></div>
+          <i class="sprinkle s1"></i><i class="sprinkle s2"></i>
+          <i class="sprinkle s3"></i><i class="sprinkle s4"></i>
+          <i class="sprinkle s5"></i><i class="sprinkle s6"></i>
+          <div class="plate"></div>
+        </div>
+      </section>
+
+      <button class="celebrate reveal-letter" id="reveal-letter" type="button" aria-controls="letter" aria-expanded="false">💌 편지 열어보기</button>
+      <section class="message" id="letter" aria-label="생일 편지" tabindex="-1" hidden>
+        <h2>To. 나연아 💌</h2>
+        <p>
+          나연아, 생일 축하해! 우리가 만난 지 1년이 넘어가는데ㅋㅋㅋ 시간 생각보다 너무 빨리 간다.
+          야, 항상 말하는데 진짜 고맙다. 나 힘들 때마다 너 덕에 살아 있어. 네가 나를 여러 번 살렸어.
+          내가 이런 거 만드는 거 약간 할 수 있어서 해 주는 거야. 다시 한번 생일 축하한다, 나연아.
+          오늘은 네가 가장 행복하길 바랄게~!
+        </p>
+        <p class="signoff">소중한 경민이가 🎀</p>
+      </section>
+
+      <button class="celebrate" id="celebrate" type="button">🎉 초 끄고 소원 빌기</button>
+      <p class="footer">오늘의 주인공에게, 온 마음을 담아</p>
+    </article>
+  </main>
+
+  <script>
+    const cake = document.querySelector("#cake");
+    const button = document.querySelector("#celebrate");
+    const revealButton = document.querySelector("#reveal-letter");
+    const letter = document.querySelector("#letter");
+    const colors = ["#f29ab8", "#ffd66e", "#b6dfcf", "#c5a8e8", "#fff"];
+
+    revealButton.addEventListener("click", () => {
+      letter.hidden = false;
+      revealButton.hidden = true;
+      revealButton.setAttribute("aria-expanded", "true");
+      letter.focus();
+    });
+
+    button.addEventListener("click", () => {
+      cake.classList.add("blown");
+      button.textContent = "💖 소원이 꼭 이루어지길!";
+      button.disabled = true;
+      button.setAttribute("aria-live", "polite");
+
+      for (let i = 0; i < 80; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "confetti";
+        piece.setAttribute("aria-hidden", "true");
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.backgroundColor = colors[i % colors.length];
+        piece.style.setProperty("--drift", `${Math.random() * 180 - 90}px`);
+        piece.style.animationDelay = `${Math.random() * 0.8}s`;
+        document.body.appendChild(piece);
+        piece.addEventListener("animationend", () => piece.remove(), { once: true });
+      }
+    });
+  </script>
+</body>
+</html>
